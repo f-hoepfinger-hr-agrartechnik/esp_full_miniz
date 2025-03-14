@@ -1,8 +1,7 @@
 idf_component_register(
         SRCS
-            "src/miniz.c"
         INCLUDE_DIRS
-            "include"
+            "include" "src"
         PRIV_REQUIRES
         	esp_rom
 )
