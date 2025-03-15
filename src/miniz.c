@@ -14,10 +14,18 @@ typedef unsigned char mz_validate_uint64[sizeof(mz_uint64)==8 ? 1 : -1];
 
 #define MZ_ASSERT(x) assert(x)
 
+#define USE_PSRAM
+
+
 #ifdef MINIZ_NO_MALLOC
   #define MZ_MALLOC(x) NULL
   #define MZ_FREE(x) (void)x, ((void)0)
   #define MZ_REALLOC(p, x) NULL
+#elif USE_PSRAM
+  #include "esp_heap_caps.h"   
+  #define MZ_MALLOC(x) heap_caps_malloc(x, MALLOC_CAP_SPIRAM) 
+  #define MZ_FREE(x) free(x) 
+  #define MZ_REALLOC(p, x) heap_caps_realloc(p, x, MALLOC_CAP_SPIRAM) 
 #else
   #define MZ_MALLOC(x) malloc(x)
   #define MZ_FREE(x) free(x)
